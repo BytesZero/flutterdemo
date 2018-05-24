@@ -41,7 +41,12 @@ class TutorialHome extends StatelessWidget {
           ],
         ),
         body: new Center(
-          child: new FavoriteWidget(),
+          child: new Column(
+            children: <Widget>[
+              new MyText(),
+              new FavoriteWidget(),
+            ],
+          ),
         ),
         floatingActionButton: new FloatingActionButton(
             tooltip: "Add", child: new Icon(Icons.add), onPressed: null),
@@ -49,6 +54,7 @@ class TutorialHome extends StatelessWidget {
   }
 }
 
+///Hello Wrold 增加点击事件
 class MyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -57,7 +63,10 @@ class MyText extends StatelessWidget {
         final snackBar = new SnackBar(content: new Text("Tap"));
         Scaffold.of(context).showSnackBar(snackBar);
       },
-      child: new Text("Hello World"),
+      child: new Container(
+        child: new Text("Hello World"),
+        margin: new EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 24.0),
+      ),
     );
   }
 }
@@ -79,9 +88,10 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         new Container(
-          padding: new EdgeInsets.all(0.0),
+          padding: EdgeInsets.zero,
+          margin: EdgeInsets.zero,
           child: new IconButton(
-              padding: new EdgeInsets.all(0.0),
+              padding: EdgeInsets.zero,
               icon: (_isFavorited
                   ? new Icon(Icons.star)
                   : new Icon(Icons.star_border)),
