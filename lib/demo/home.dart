@@ -41,7 +41,7 @@ class TutorialHome extends StatelessWidget {
           ],
         ),
         body: new Center(
-          child: new MyText(),
+          child: new FavoriteWidget(),
         ),
         floatingActionButton: new FloatingActionButton(
             tooltip: "Add", child: new Icon(Icons.add), onPressed: null),
@@ -50,7 +50,6 @@ class TutorialHome extends StatelessWidget {
 }
 
 class MyText extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return new GestureDetector(
@@ -60,5 +59,55 @@ class MyText extends StatelessWidget {
       },
       child: new Text("Hello World"),
     );
+  }
+}
+
+///创建一个有状态的Widget
+class FavoriteWidget extends StatefulWidget {
+  @override
+  _FavoriteWidgetState createState() => new _FavoriteWidgetState();
+}
+
+///创建状态
+class _FavoriteWidgetState extends State<FavoriteWidget> {
+  bool _isFavorited = true; //是否收藏
+  int _favoriteCount = 41; //收藏个数
+
+  @override
+  Widget build(BuildContext context) {
+    return new Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        new Container(
+          padding: new EdgeInsets.all(0.0),
+          child: new IconButton(
+              padding: new EdgeInsets.all(0.0),
+              icon: (_isFavorited
+                  ? new Icon(Icons.star)
+                  : new Icon(Icons.star_border)),
+              color: Colors.red[500],
+              onPressed: _toggleFavorite),
+        ),
+        new SizedBox(
+          width: 18.0,
+          child: new Container(
+            child: new Text('$_favoriteCount'),
+          ),
+        )
+      ],
+    );
+  }
+
+  ///切换收藏状态
+  void _toggleFavorite() {
+    setState(() {
+      if (_isFavorited) {
+        _isFavorited = false;
+        _favoriteCount -= 1;
+      } else {
+        _isFavorited = true;
+        _favoriteCount += 1;
+      }
+    });
   }
 }
