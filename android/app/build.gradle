@@ -18,30 +18,49 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion 27
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.zsl.flutterdemo"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
+        //只加载简体中文
+        resConfigs "zh-rCN"
+        //ndk设置
+        ndk {
+            //只要arm64-v8a的动态库
+            abiFilters "arm64-v8a"
+        }
+        //测试框架
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
+            //启用资源压缩
+            shrinkResources true
+            //启用代码压缩
+            minifyEnabled true
+            //签名
             signingConfig signingConfigs.debug
         }
+        debug {
+            //版本名称增加后缀
+            versionNameSuffix "_debug"
+            //签名
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    //制定kotlin 代码目录
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    //lint检查项
+    lintOptions {
+        //禁用无效包名检查
+        disable 'InvalidPackage'
     }
 }
 

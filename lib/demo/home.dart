@@ -11,13 +11,20 @@ class MyApp extends StatelessWidget {
       theme: base.copyWith(
         primaryColor: primaryColor,
       ),
-      home: new TutorialHome(),
+      home: new Home(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class TutorialHome extends StatelessWidget {
+///主页面
+class Home extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => new HomeState();
+}
+
+///主页面状态
+class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -36,9 +43,25 @@ class TutorialHome extends StatelessWidget {
         floatingActionButton: new FloatingActionButton(
           tooltip: "Add",
           child: new Icon(Icons.add),
-          onPressed: null,
+          onPressed: _pushNewPage,
         ),
         primary: true);
+  }
+
+  ///跳转到新的页面
+  void _pushNewPage() {
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        builder: (context) {
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text("Hello World Page"),
+            ),
+            body: new MyText(),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -87,8 +110,9 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
               onPressed: _toggleFavorite),
         ),
         new SizedBox(
-          width: 18.0,
           child: new Container(
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
             child: new Text('$_favoriteCount'),
           ),
         )
