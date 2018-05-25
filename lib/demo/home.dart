@@ -4,13 +4,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = const Color(0xFF0175c2);
-    final ThemeData base = new ThemeData.light();
     return new MaterialApp(
       title: 'Flutter Demo',
-      theme: base.copyWith(
-        primaryColor: primaryColor,
-      ),
+      theme: new ThemeData(primarySwatch: Colors.blue),
       home: new Home(),
       debugShowCheckedModeBanner: false,
     );
@@ -25,48 +21,91 @@ class Home extends StatefulWidget {
 
 ///主页面状态
 class HomeState extends State<Home> {
+  List<HomeItem> homeListData = <HomeItem>[
+    new HomeItem(position: 1, name: 'Hello World'),
+    new HomeItem(position: 2, name: 'Favorite')
+  ];
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
           centerTitle: true,
-          title: new Text("Example title"),
+          title: new Text("Home"),
         ),
-        body: new Center(
-          child: new Column(
-            children: <Widget>[
-              new MyText(),
-              new FavoriteWidget(),
-            ],
-          ),
-        ),
+        body: _homeList(),
         floatingActionButton: new FloatingActionButton(
           tooltip: "Add",
           child: new Icon(Icons.add),
-          onPressed: _pushNewPage,
+          onPressed: null,
         ),
         primary: true);
   }
 
+  ///ListView
+  Widget _homeList() {
+    Iterable<Widget> listTiles =
+        homeListData.map((HomeItem item) => buildListTile(context, item));
+    //增加间隔线
+    listTiles = ListTile.divideTiles(context: context, tiles: listTiles);
+    return new ListView(
+      padding: new EdgeInsets.all(16.0),
+      children: listTiles.toList(),
+    );
+  }
+
+  ///构建ListTile
+  Widget buildListTile(BuildContext context, HomeItem item) {
+    return new ListTile(
+      title: new Text(
+        item.name,
+        style: new TextStyle(fontSize: 18.0),
+      ),
+      subtitle: new Text('position:${item.position}'),
+      onTap: () {
+        pushNewPage(item);
+      },
+    );
+  }
+
   ///跳转到新的页面
-  void _pushNewPage() {
-    Navigator.of(context).push(
+  void pushNewPage(HomeItem item) {
+    Navigator.push(
+      context,
       new MaterialPageRoute(
-        builder: (context) {
+        builder: (BuildContext context) {
           return new Scaffold(
             appBar: new AppBar(
-              title: new Text("Hello World Page"),
+              title: new Text("${item.name} Page"),
+              centerTitle: true,
             ),
-            body: new MyText(),
+            body: pushPage(item),
           );
         },
       ),
     );
   }
+
+  ///获取新页面
+  Widget pushPage(HomeItem item) {
+    int position = item.position;
+    if (position == 2) {
+      return new FavoriteWidget();
+    }
+    return new HelloWorld();
+  }
+}
+
+///首页列表Item
+class HomeItem {
+  HomeItem({this.position, this.name});
+
+  final int position;
+  final String name;
 }
 
 ///Hello Wrold 增加点击事件
-class MyText extends StatelessWidget {
+class HelloWorld extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new GestureDetector(
@@ -74,9 +113,8 @@ class MyText extends StatelessWidget {
         final snackBar = new SnackBar(content: new Text("Tap"));
         Scaffold.of(context).showSnackBar(snackBar);
       },
-      child: new Container(
+      child: new Center(
         child: new Text("Hello World"),
-        margin: new EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 24.0),
       ),
     );
   }
@@ -95,7 +133,8 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Row(
+    return new Center(
+        child: new Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         new Container(
@@ -117,7 +156,7 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
           ),
         )
       ],
-    );
+    ));
   }
 
   ///切换收藏状态
